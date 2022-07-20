@@ -52,15 +52,49 @@ class ApiController extends Controller
         if (!is_dir($dirPath)) {
             mkdir($dirPath, 0777, true);
         }
-        //$file = _IMG_PATH . "/" . $productId . "/" . $type . "/" . uniqid() . "." . $image_type;
-        //$file = "static/" . uniqid() . "." . $image_type;
         $result = file_put_contents($filePath, $image_base64);
+        if ($result) {
+            $param = [
+                "product_id" => $productId,
+                "type" => $type,
+                "path" => uniqid() . "." . $image_type
+            ];
+            $this->model->productImageInsert($param);
+        }
+        return [_RESULT => $result ? 1 : 0];
+    }
+
+    public function productImageList()
+    {
+        $urlPaths = getUrlPaths();
+        if (!isset($urlPaths[2])) {
+            exit();
+        }
+        $productId = intval($urlPaths[2]);
         $param = [
             "product_id" => $productId,
-            "type" => $image_type,
-            "path" => uniqid() . "." . $image_type
         ];
-        $this->model->productImageInsert($param);
-        return [_RESULT => 1];
+        return $this->model->productImageList($param);
+    }
+
+    public function productImageDelete()
+    {
+        $urlPaths = getUrlPaths();
+        if (!isset($urlPaths[2])) {
+            exit();
+        }
+        $result = 0;
+        switch (getMethod()) {
+            case _DELETE:
+                //delete image file
+
+
+
+                $param = ["product_image_id" => intval($urlPaths[2])];
+                $result = $this->model->productImageDelete($param);
+                break;
+        }
+
+        return [_RESULT => $result];
     }
 }
