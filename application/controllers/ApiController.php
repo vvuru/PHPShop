@@ -48,7 +48,8 @@ class ApiController extends Controller
         $image_type = $image_type_aux[1];
         $image_base64 = base64_decode($image_parts[1]);
         $dirPath = _IMG_PATH . "/" . $productId . "/" . $type;
-        $filePath = $dirPath . "/" . uniqid() . "." . $image_type;
+        $fileNm = uniqid() . "." . $image_type;
+        $filePath = $dirPath . "/" . $fileNm;
         if (!is_dir($dirPath)) {
             mkdir($dirPath, 0777, true);
         }
@@ -57,7 +58,7 @@ class ApiController extends Controller
             $param = [
                 "product_id" => $productId,
                 "type" => $type,
-                "path" => uniqid() . "." . $image_type
+                "path" => $fileNm
             ];
             $this->model->productImageInsert($param);
         }
@@ -87,10 +88,13 @@ class ApiController extends Controller
         switch (getMethod()) {
             case _DELETE:
                 //delete image file
-
-
-
                 $param = ["product_image_id" => intval($urlPaths[2])];
+                $imgData = $this->model->productImageById($param);
+                $imgPath = _IMG_PATH . "/" . $imgData->product_id . "/" . $imgData->type . "/" . $imgData->path;
+                if (file_exists($imgPath)) {
+                    unlink($imgPath);
+                }
+
                 $result = $this->model->productImageDelete($param);
                 break;
         }

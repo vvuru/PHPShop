@@ -49,7 +49,7 @@ class ApiModel extends Model
                 LEFT JOIN (
                     SELECT * FROM t_product_img WHERE type=1
                     ) t4
-                ON t3.id = t4.id";
+                ON t3.id = t4.product_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -105,5 +105,14 @@ class ApiModel extends Model
         $stmt->bindValue(":product_image_id", $param["product_image_id"]);
         $stmt->execute();
         return $stmt->rowCount();
+    }
+
+    public function productImageById(&$param)
+    {
+        $sql = "SELECT * FROM t_product_img WHERE id = :product_image_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":product_image_id", $param["product_image_id"]);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 }
