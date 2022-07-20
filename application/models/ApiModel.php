@@ -74,4 +74,18 @@ class ApiModel extends Model
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
+    public function productImageInsert(&$param)
+    {
+        $sql = "INSERT INTO t_product_img
+                        SET product_id = :product_id,
+                            type = :type,
+                            path = :path";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":product_id", $param["product_id"]);
+        $stmt->bindValue(":type", $param["type"]);
+        $stmt->bindValue(":path", $param["path"]); // 파일명 + 확장자 저장
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
 }
