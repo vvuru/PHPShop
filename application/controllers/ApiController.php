@@ -100,5 +100,15 @@ class ApiController extends Controller
         }
 
         return [_RESULT => $result];
+    },
+
+    public function deleteProduct()
+    {
+        $urlPaths = getUrlPaths();
+        if(count($urlPaths) !== 3) {
+            exit();
+        }
+        $productId = intval($urlPaths[2]);
+        // delete image
     }
 }

@@ -19,3 +19,8 @@ function gen_uuid_v4() {
         , mt_rand(0, 0xffff) 
     ); 
 }
+
+public function rmdirAll($delte_path)
+{
+    $dirs
+}

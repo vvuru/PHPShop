@@ -115,4 +115,9 @@ class ApiModel extends Model
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    public function deleteProduct(&$param)
+    {
+        # code...
+    }
 }
